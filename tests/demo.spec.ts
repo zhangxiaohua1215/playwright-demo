@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { AntdForm } from '../components/antd-form';
 
-test('Ant Design Form Automation Demo', async ({ page }) => {
-  await page.goto('/');
+test('Ant Design Form Automation Demo (Basic)', async ({ page }) => {
+  await page.goto('/basic');
 
   // 1. Initialize and scan the form
   const form = await AntdForm.create(page);

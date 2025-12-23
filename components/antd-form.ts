@@ -88,6 +88,16 @@ export class AntdForm {
   }
 
   /**
+   * 获取指定 Label 对应的控件区域 Locator
+   * 供高级用户手动实例化组件或进行原生 Playwright 操作
+   */
+  getLocator(labelText: string): Locator {
+    return this.root
+      .locator('.ant-form-item', { hasText: labelText }) // 这里的 hasText 很宽松，也能匹配到 placeholder
+      .locator('.ant-form-item-control');
+  }
+
+  /**
    * 获取组件实例 (原 getField)
    */
   field<T extends FormWidget = FormWidget>(labelText: string): T {
@@ -100,12 +110,8 @@ export class AntdForm {
     // 2. 实例化
     const WidgetClass = WIDGET_MAP[type] || WIDGET_MAP['Default'];
 
-    // 3. 定位到具体的 control 区域 (Playwright 懒加载)
-    const controlArea = this.root
-      .locator('.ant-form-item', { hasText: labelText }) // 这里的 hasText 很宽松，也能匹配到 placeholder
-      .locator('.ant-form-item-control');
-
-    return new WidgetClass(controlArea) as T;
+    // 3. 使用 getLocator 方法定位
+    return new WidgetClass(this.getLocator(labelText)) as T;
   }
 
   /**
